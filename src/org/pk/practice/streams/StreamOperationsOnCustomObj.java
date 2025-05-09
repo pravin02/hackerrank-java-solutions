@@ -20,6 +20,12 @@ public class StreamOperationsOnCustomObj {
 
         System.out.println("Second Highest Salary Employee\n " + findTheNthHighestSalariedEmployee(employees, 2));
         System.out.println();
+
+        System.out.println("Lowest Salary Employee\n " + findTheLowestNthSalariedEmployee(employees, 1));
+        System.out.println();
+
+        System.out.println("Second Lowest Salary Employee\n " + findTheLowestNthSalariedEmployee(employees, 2));
+        System.out.println();
     }
 
     static Employee findTheNthHighestSalariedEmployee(List<Employee> employees, int nth) {
@@ -36,4 +42,17 @@ public class StreamOperationsOnCustomObj {
                 .orElse(null);
     }
 
+    static Employee findTheLowestNthSalariedEmployee(List<Employee> employees, int nth) {
+        if (nth <= 0 || nth > employees.size()) {
+            throw new RuntimeException("Invalid rank passed");
+        }
+        return employees
+                .stream()
+                .sorted()
+                .toList()
+                .stream()
+                .skip(nth - 1)
+                .findFirst()
+                .orElse(null);
+    }
 }
