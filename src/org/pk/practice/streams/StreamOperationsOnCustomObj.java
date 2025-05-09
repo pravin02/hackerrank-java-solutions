@@ -17,6 +17,9 @@ public class StreamOperationsOnCustomObj {
 
         System.out.println("Highest Salary Employee\n " + findTheNthHighestSalariedEmployee(employees, 1));
         System.out.println();
+
+        System.out.println("Second Highest Salary Employee\n " + findTheNthHighestSalariedEmployee(employees, 2));
+        System.out.println();
     }
 
     static Employee findTheNthHighestSalariedEmployee(List<Employee> employees, int nth) {
