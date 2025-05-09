@@ -32,6 +32,9 @@ public class StreamOperationsOnCustomObj {
 
         System.out.println("Employee Age less than 30\n " + findEmployeeAgeLessThan(employees, 30));
         System.out.println();
+
+        System.out.println("Employee Age Greater than 31\n " + findEmployeeAgeGreaterThan(employees, 31));
+        System.out.println();
     }
 
     static Employee findTheNthHighestSalariedEmployee(List<Employee> employees, int nth) {
@@ -74,12 +77,28 @@ public class StreamOperationsOnCustomObj {
                 .toList();
     }
 
+    static List<EmployeeAgeDesignationSalaryDto> findEmployeeAgeGreaterThan(List<Employee> employees, int age) {
+        if (age <= 22 || age > 60) {
+            throw new RuntimeException("Age must be between 22 to 60");
+        }
+        return employees
+                .stream()
+                .filter(getAgeGreaterThanPredicate(age))
+                .sorted(Comparator.reverseOrder())
+                .map(StreamOperationsOnCustomObj::employeeToDtoMapper)
+                .toList();
+    }
+
     static EmployeeAgeDesignationSalaryDto employeeToDtoMapper(Employee e) {
         return new EmployeeAgeDesignationSalaryDto(e.getId(), e.getFirstName(), e.getLastName(), getAge(e.getDob()), e.getDesignation());
     }
 
     static Predicate<Employee> getAgeLowerThanPredicate(int age) {
         return (Employee e) -> getAge(e.getDob()) <= age;
+    }
+
+    static Predicate<Employee> getAgeGreaterThanPredicate(int age) {
+        return (Employee e) -> getAge(e.getDob()) >= age;
     }
 
     static int getAge(LocalDate dob) {
