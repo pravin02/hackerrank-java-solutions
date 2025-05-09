@@ -84,10 +84,7 @@ public abstract class Employee implements Comparable<Employee> {
 
     @Override
     public int compareTo(Employee e) {
-        if (Double.compare(this.getCtc(), e.getCtc()) == 0) {
-            return 0;
-        }
-        return e.getFirstName().compareTo(this.getFirstName());
+        return Double.compare(this.getCtc(), e.getCtc());
     }
 
     @Override
