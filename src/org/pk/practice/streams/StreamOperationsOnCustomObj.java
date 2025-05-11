@@ -1,5 +1,6 @@
 package org.pk.practice.streams;
 
+import org.pk.practice.models.Designation;
 import org.pk.practice.models.Employee;
 import org.pk.practice.models.EmployeeAgeDesignationSalaryDto;
 import org.pk.practice.models.EmployeeDummyList;
@@ -45,6 +46,9 @@ public class StreamOperationsOnCustomObj {
         System.out.println();
 
         System.out.println("Partition list of Employees by age 30 and return dto \n " + partitionListOfEmployeesByAgeDto(employees, 30));
+        System.out.println();
+
+        System.out.println("Manager who has highest salary \n " + findTheNthHighestSalariedEmployee(employees, Designation.MANAGER, 1));
         System.out.println();
 
 
@@ -123,8 +127,20 @@ public class StreamOperationsOnCustomObj {
         return employees.stream().collect(Collectors.partitioningBy(getAgeGreaterThanPredicate(age), Collectors.mapping(StreamOperationsOnCustomObj::employeeToDtoMapper, Collectors.toList())));
     }
 
+    static Employee findTheNthHighestSalariedEmployee(List<Employee> employees, Designation designation, int nth) {
+        if (nth <= 0 || nth > employees.size()) {
+            throw new RuntimeException("Invalid rank passed");
+        }
+
+        return employees.stream().filter(getDesignationPredicate(designation)).sorted(Comparator.reverseOrder()).toList().stream().skip(nth - 1).findFirst().orElseThrow(() -> new RuntimeException("No Employee found with designation " + designation + " with rank " + nth + " who has lowest salary."));
+    }
+
     static EmployeeAgeDesignationSalaryDto employeeToDtoMapper(Employee e) {
         return new EmployeeAgeDesignationSalaryDto(e.getId(), e.getFirstName(), e.getLastName(), getAge(e.getDob()), e.getDesignation());
+    }
+
+    static Predicate<Employee> getDesignationPredicate(Designation designation) {
+        return (Employee e) -> e.getDesignation().equals(designation);
     }
 
     static Predicate<Employee> getAgeLowerThanPredicate(int age) {
