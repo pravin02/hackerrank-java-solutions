@@ -24,7 +24,7 @@ public class CustomQueue<E> {
     public void put(E item) {
         lock.lock();
         try {
-            if (queue.size() == max) {
+            while (queue.size() == max) {
                 notFull.await(); // queue is full it will wait for notification to move ahead
             }
             queue.add(item);
