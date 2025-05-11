@@ -41,6 +41,12 @@ public class StreamOperationsOnCustomObj {
         System.out.println("Employees Age Range between 28-33 \n " + findEmployeeByAgeRange(employees, 28, 33));
         System.out.println();
 
+        System.out.println("Partition list of Employees by age 30 \n " + partitionListOfEmployeesByAge(employees, 30));
+        System.out.println();
+
+        System.out.println("Partition list of Employees by age 30 and return dto \n " + partitionListOfEmployeesByAgeDto(employees, 30));
+        System.out.println();
+
 
     }
 
@@ -108,6 +114,13 @@ public class StreamOperationsOnCustomObj {
             throw new RuntimeException("Age must be between 22 to 60");
         }
         return employees.stream().collect(Collectors.partitioningBy(getAgeGreaterThanPredicate(age)));
+    }
+
+    static Map<Boolean, List<EmployeeAgeDesignationSalaryDto>> partitionListOfEmployeesByAgeDto(List<Employee> employees, int age) {
+        if (age <= 22 || age > 60) {
+            throw new RuntimeException("Age must be between 22 to 60");
+        }
+        return employees.stream().collect(Collectors.partitioningBy(getAgeGreaterThanPredicate(age), Collectors.mapping(StreamOperationsOnCustomObj::employeeToDtoMapper, Collectors.toList())));
     }
 
     static EmployeeAgeDesignationSalaryDto employeeToDtoMapper(Employee e) {
