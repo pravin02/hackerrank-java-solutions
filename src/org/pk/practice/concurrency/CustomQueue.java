@@ -7,10 +7,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class CustomQueue<E> {
 
-    private final ReentrantLock lock = new ReentrantLock(true);
-    private final Condition notEmpty = lock.newCondition();
-    private final Condition notFull = lock.newCondition();
-    private Queue<E> queue = new LinkedList<>();
+    private final ReentrantLock lock = new ReentrantLock(true); // lock to ensure only one thread should get chance to execute block of code
+    private final Condition notEmpty = lock.newCondition(); // condition to wait if queue is empty
+    private final Condition notFull = lock.newCondition(); // condition to wait if queue is full
+    private Queue<E> queue = new LinkedList<>(); // queue to hold records order by added
     private int max = 10;
 
     public CustomQueue() {
@@ -25,10 +25,10 @@ public class CustomQueue<E> {
         lock.lock();
         try {
             if (queue.size() == max) {
-                notFull.await();
+                notFull.await(); // queue is full it will wait for notification to move ahead
             }
             queue.add(item);
-            notEmpty.signalAll();
+            notEmpty.signalAll(); // now queue is not empty signalling to other threads where they were waiting
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
@@ -40,11 +40,11 @@ public class CustomQueue<E> {
         lock.lock();
         try {
             while (queue.isEmpty()) {
-                notEmpty.await();
+                notEmpty.await(); // queue is empty it will wait here for notification to move ahead
             }
 
             E item = queue.remove();
-            notFull.signalAll();
+            notFull.signalAll(); // now queue is not full some item got consumed, signalling to other threads where they were waiting
             return item;
         } catch (InterruptedException ie) {
             throw new RuntimeException(ie);
