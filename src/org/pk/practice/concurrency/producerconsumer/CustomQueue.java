@@ -1,4 +1,4 @@
-package org.pk.practice.concurrency;
+package org.pk.practice.concurrency.producerconsumer;
 
 import java.util.LinkedList;
 import java.util.Queue;
