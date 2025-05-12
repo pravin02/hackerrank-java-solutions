@@ -1,4 +1,4 @@
-package org.pk.practice.concurrency;
+package org.pk.practice.concurrency.producerconsumer;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
